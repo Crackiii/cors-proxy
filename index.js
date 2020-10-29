@@ -22,4 +22,4 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 8003;
-app.listen(PORT, () => console.log(`listening on ${PORT}`));
+app.listen(process.env.PORT, () => console.log(`listening on ${PORT}`));
