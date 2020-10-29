@@ -11,8 +11,15 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.post("/", (req, res) => {
+    res.send({success: true});
+})
 
 app.get('/', (req, res) => {
+    res.send("Application is deployed!!")
+});
+
+app.get('/pdf-cors', (req, res) => {
   request(
     { url: 'https://www.mazda.com/globalassets/en/assets/csr/download/2017/2017_all.pdf' },
     (error, response, body) => {
@@ -24,13 +31,7 @@ app.get('/', (req, res) => {
   )
 });
 
-app.post("/test", (req, res) => {
-    res.send({success: true});
-})
 
-app.get('/test', (req, res) => {
-    res.send("Application is deployed!!")
-  });
 
 const PORT = process.env.PORT || 8003;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
