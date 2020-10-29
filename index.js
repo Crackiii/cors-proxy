@@ -22,15 +22,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
 
 app.get('/', (req, res) => {
-    console.log("REQUEST MADE");
   request(
-    { url: 'https://www.mazda.com/' },
+    { url: 'https://www.mazda.com/globalassets/en/assets/csr/download/2017/2017_all.pdf' },
     (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.status(500).json({ type: 'error', message: err.message });
@@ -41,4 +36,4 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 8003;
-app.listen(process.env.PORT, () => console.log(`listening on ${PORT}`));
+app.listen(PORT, () => console.log(`listening on ${PORT}`));
