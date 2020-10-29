@@ -35,5 +35,9 @@ app.get('/', (req, res) => {
   )
 });
 
+app.post("/test", (req, res) => {
+    res.send({success: true});
+})
+
 const PORT = process.env.PORT || 8003;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
