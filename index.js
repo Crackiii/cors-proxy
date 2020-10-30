@@ -6,6 +6,8 @@ const app = express();
 
 app.use(bp.json());
 
+app.use(express.static('public'))
+
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -15,7 +17,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get('/pdf-cors', (req, res) => {
