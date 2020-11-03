@@ -26,10 +26,11 @@ app.get('/pdf-cors', (req, res) => {
         res.send({"file-error": "no file to read"});
         return;
     }
-    
     https.get(file)
         .on('response', response => {
-        res.setHeader('Content-Length', response.headers["content-length"])
+        res.setHeader('Content-Length', response.headers["content-length"]);
+        //Set headers to cache the recieved data
+        res.set('Cache-Control', 'public, max-age=31557600');
         response.on('data', data => {
             res.write(data);
         })
