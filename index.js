@@ -53,5 +53,5 @@ app.get('/pdf-cors', (req, res) => {
     })
 });
 
-const PORT = process.env.PORT || 8003;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
