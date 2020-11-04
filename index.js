@@ -16,42 +16,39 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    try{
+        res.sendFile(__dirname + '/public/index.html');
+    } catch(e) {
+        res.send({"Error": "Something went wrong !"});
+    }
 });
 
 app.get('/pdf-cors', (req, res) => {
-    const { file } = req.query;
-    const fileHash = md5(file).words.join("").replace(/-/g, '');
-    if(!file) {
-        res.send({"file-error": "no file to read"});
-        return;
-    }
-
-    if(fs.existsSync(`cache/${fileHash}.txt`)) {
-        const stream = fs.createReadStream(`cache/${fileHash}.txt`);
-        stream.on('open', _ => stream.pipe(res) )
-        stream.on('end', _ => {
-            res.end();
-            console.log("CACHE: File reading done !");
-        })
-        return;
-    }
+    try {
+        const { file } = req.query;
+        const fileHash = md5(file).words.join("").replace(/-/g, '');
+        if(!file) {
+            res.send({"file-error": "no file to read"});
+            return;
+        }
     
-    https.get(file)
-        .on('response', response => {
-        res.setHeader('Content-Length', response.headers["content-length"]);
-        //Set headers to cache the recieved data
-        res.set('Cache-Control', 'public, max-age=3600');
-        response.on('data', data => {
-            fs.appendFileSync(`cache/${fileHash}.txt`, data, "binary",{'flags': 'a+'});
-            res.write(data);
+        https.get(file)
+            .on('response', response => {
+            res.setHeader('Content-Length', response.headers["content-length"]);
+            //Set headers to cache the recieved data
+            res.set('Cache-Control', 'public, max-age=3600');
+            response.on('data', data => {
+                res.write(data);
+            })
+            response.on('end', _ => {
+                res.end();
+                console.log("API: File reading done !");
+            })
         })
-        response.on('end', _ => {
-            res.end();
-            console.log("API: File reading done !");
-        })
-    })
-});
+    } catch(e) {
+        res.send({"Error": "Something went wrong !"});
+    };
 
+});
 const PORT = process.env.PORT || 8003;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
